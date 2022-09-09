@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 from likes_favourites.serializers import FavouritesSerializer
 
+
 User = get_user_model()
 
 
@@ -110,4 +111,5 @@ class UserSerializer(serializers.ModelSerializer):
         repr = super().to_representation(instance)
         repr['favourites'] = FavouritesSerializer(instance.favourites.all(), many=True).data
         return repr
+
 

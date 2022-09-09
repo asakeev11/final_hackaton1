@@ -8,7 +8,7 @@ from rest_framework.filters import SearchFilter
 from django.contrib.auth import get_user_model
 from . import serializers
 from .permission import IsAccountOwner
-from .send_email import send_confirmation_email, send_reset_password
+from car_rental.tasks import send_email_task, send_reset_password_task
 
 User = get_user_model()
 
@@ -38,7 +38,7 @@ class RegistrationView(APIView):
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
             if user:
-                send_confirmation_email(user)
+                send_email_task.delay(user.email, user.activation_code)
                 return Response(serializer.data, status=201)
             return Response(status=400)
 
@@ -86,10 +86,10 @@ class ForgotPasswordView(APIView):
             user = User.objects.get(email=serializer.data.get('email'))
             user.create_activation_code()
             user.save()
-            send_reset_password(user)
+            send_reset_password_task.delay(user.email, user.activation_code)
             return Response('Check your mail', status=200)
         except User.DoesNotExist:
-            Response('User with this email does not exist', status=400)
+            return Response('User with this email does not exist', status=400)
 
 
 class RestorePasswordView(APIView):
@@ -100,3 +100,6 @@ class RestorePasswordView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response('Password changed', status=200)
+
+
+
