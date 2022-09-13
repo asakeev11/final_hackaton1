@@ -1,0 +1,36 @@
+{% load socialaccount %}
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <title>Google Registration</title>
+</head>
+
+<body>
+    <div class="container mt-5 pt-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-7">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Django Login with Google Example - Tuts-Station.com</h4>
+                    </div>
+                    <div class="card-body">
+                        {% if user.is_authenticated %}
+                        <p>Welcome, <strong>{{ user.username }} !</strong></p>
+
+                        {% else %}
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <a href="{% provider_login_url 'google' %}" class="btn btn-primary"><i class="fa fa-google" aria-hidden="true"></i> Login with Google</a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
