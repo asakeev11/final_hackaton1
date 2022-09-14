@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from cars.models import Car
 from .models import Like, Favourites
 from cars.serializers import CarsListSerializer
 
